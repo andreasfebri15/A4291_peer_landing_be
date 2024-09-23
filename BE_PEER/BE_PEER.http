@@ -1,0 +1,6 @@
+@BE_PEER_HostAddress = http://localhost:5212
+
+GET {{BE_PEER_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
