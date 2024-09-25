@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(CustomerContext))]
-    [Migration("20240925024245_asd")]
-    partial class asd
+    [Migration("20240925083940_coba1")]
+    partial class coba1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,9 +30,8 @@ namespace DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("Amount")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric")
                         .HasColumnName("amount");
 
                     b.Property<string>("BorrowerId")
@@ -40,9 +39,16 @@ namespace DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("borrower_id");
 
-                    b.Property<string>("InteresestRate")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer")
+                        .HasColumnName("duration");
+
+                    b.Property<decimal>("InteresestRate")
+                        .HasColumnType("numeric")
                         .HasColumnName("interest_rate");
 
                     b.Property<string>("Status")
@@ -50,21 +56,12 @@ namespace DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("status");
 
-                    b.Property<DateTime>("Update_at")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("Update_at");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("created_at")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<string>("duration")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("duration");
 
                     b.HasKey("Id");
 

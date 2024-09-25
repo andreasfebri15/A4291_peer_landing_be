@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class asd : Migration
+    public partial class coba1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,9 +42,9 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     borrower_id = table.Column<string>(type: "text", nullable: false),
-                    amount = table.Column<string>(type: "text", nullable: false),
-                    interest_rate = table.Column<string>(type: "text", nullable: false),
-                    duration = table.Column<string>(type: "text", nullable: false),
+                    amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    interest_rate = table.Column<decimal>(type: "numeric", nullable: false),
+                    duration = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Update_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

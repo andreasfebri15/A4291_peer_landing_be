@@ -63,7 +63,7 @@ namespace DAL.Repositoris.Service
 
         }
 
-        public async Task<string>  UpdateStatusLoan(ReqEditDtoLoan loan, string id)
+        public async Task<string> UpdateStatusLoan(ReqEditDtoLoan loan, string id)
         {
             var borrower = _peerlandingcontext.MstLoans.FirstOrDefault(x => x.Id == id);
 
@@ -73,7 +73,7 @@ namespace DAL.Repositoris.Service
             }
 
             borrower.Status = loan.Status;
-
+            borrower.UpdatedAt = DateTime.UtcNow;
 
             _peerlandingcontext.MstLoans.Update(borrower);
             _peerlandingcontext.SaveChanges();
