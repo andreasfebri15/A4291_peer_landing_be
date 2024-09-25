@@ -19,9 +19,14 @@ public partial class CustomerContext : DbContext
     public virtual DbSet<MstUser> MstUsers { get; set; }
 
     public virtual DbSet<MstUser2> MstUser2 { get; set; }
+    public virtual DbSet<MstLoans> MstLoans { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseNpgsql("Name=ConnectionStrings:DefaultConnection");
+    public virtual DbSet<trn_funding> trn_funding { get; set; }
+
+
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseNpgsql("Name=ConnectionStrings:DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

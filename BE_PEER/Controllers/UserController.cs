@@ -2,6 +2,7 @@
 using DAL.DTO.Rest;
 using DAL.Repositoris.Service;
 using DAL.Repositoris.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -10,7 +11,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BE_PEER.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("rest/v1/user/[action]")]
+
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -20,9 +22,9 @@ namespace BE_PEER.Controllers
         {
             _userservices = userservices;
         }
-        [HttpPost]
 
-       
+
+        [HttpPost]
         public async Task<IActionResult> Register(ReqRegisterUserDTO register)
         {
             try
@@ -75,11 +77,12 @@ namespace BE_PEER.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllUser()
         {
             try
             {
-                var users = await _userservices.GetAllUser();
+                var users = await _userservices.GetAllUsers();
                 return Ok(new RestBaseDTO<List<ResUserDto>>
                 {
                     Success = true,
@@ -131,8 +134,121 @@ namespace BE_PEER.Controllers
                 });
             }
         }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Login (ReqLoginDto loginDto)
+        {
+            try
+            {
+                var response = await _userservices.Login(loginDto);
+                return Ok(new RestBaseDTO<object>
+                {
+
+                    Success = true,
+                    Message = "User Login Success",
+                    Data = response
+                });
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Invalid Email or Password")
+                {
+                    return BadRequest(new RestBaseDTO<object>
+                    {
+                        Success = false,
+                        Message = ex.Message,
+                        Data = null
+                    });
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new RestBaseDTO<object>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+            }
+
+
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                await _userservices.GetUserById(id);
+                await _userservices.DeleteUserById(id);
+                return Ok(new RestBaseDTO<object>
+                {
+                    Success = true,
+                    Message = "User deleted successfully",
+                    Data = null
+                });
+            }
+           
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new RestBaseDTO<string>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+
+        [Authorize(Roles = "admin")]
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update(string id, ReqEditDto dto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                        .Where(x => x.Value.Errors.Any())
+                        .Select(x => new
+                        {
+                            Field = x.Key,
+                            Messages = x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                        }).ToList();
+                    var errorMessage = new StringBuilder("Validation error occured!");
+                    return BadRequest(new RestBaseDTO<object>
+                    {
+                        Success = false,
+                        Message = errorMessage.ToString(),
+                        Data = errors
+                    });
+                };
+                await _userservices.GetUserById(id);
+                var user = await _userservices.UpdateUserById(id, dto);
+                return Ok(new RestBaseDTO<object>
+                {
+                    Success = true,
+                    Message = "User updated successfully",
+                    Data = user
+                });
+            }
+          
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new RestBaseDTO<string>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
     }
 }
+
 
 
 

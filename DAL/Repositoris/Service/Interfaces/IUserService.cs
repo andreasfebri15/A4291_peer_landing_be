@@ -11,8 +11,13 @@ namespace DAL.Repositoris.Service.Interfaces
     public interface IUserService
     {
         Task<string> Register(ReqRegisterUserDTO register);
-        Task<List<ResUserDto>> GetAllUser();
+        Task<List<ResUserDto>> GetAllUsers();
 
         Task<ResUserDto> GetUserById(string id);
+
+        Task<RestLoginDto> Login(ReqLoginDto reqLogin);
+
+        Task DeleteUserById(string id);
+        Task<ResUserDto> UpdateUserById(string id, ReqEditDto user);
     }
 }
